@@ -60,7 +60,7 @@ public class BulkTableQuerier extends TableQuerier {
   }
 
   @Override
-  public SourceRecord extractRecord() throws SQLException {
+  public SourceRecord extractRecord(String partitionKey) throws SQLException {
     Struct record = DataConverter.convertRecord(schema, resultSet);
     // TODO: key from primary key? partition?
     final String topic;
@@ -78,7 +78,11 @@ public class BulkTableQuerier extends TableQuerier {
       default:
         throw new ConnectException("Unexpected query mode: " + mode);
     }
-    return new SourceRecord(partition, null, topic, record.schema(), record);
+    Object key = null;
+    if (!partitionKey.isEmpty()) {
+      key = record.get(partitionKey);
+    }
+    return new SourceRecord(partition, null, topic, null, null, key, record.schema(), record);
   }
 
   @Override

@@ -209,7 +209,7 @@ public class JdbcSourceTask extends SourceTask {
         String partitionKey = config.getString(JdbcSourceTaskConfig.PARTITION_KEY_COLUMN_NAME_CONFIG);
         boolean hadNext = true;
         while (results.size() < batchMaxRows && (hadNext = querier.next())) {
-          results.add(querier.extractRecord());
+          results.add(querier.extractRecord(partitionKey));
         }
 
         // If we finished processing the results from this query, we can clear it out

@@ -161,7 +161,7 @@ public class TimestampIncrementingTableQuerier extends TableQuerier {
   }
 
   @Override
-  public SourceRecord extractRecord() throws SQLException {
+  public SourceRecord extractRecord(String partitionKey) throws SQLException {
     Struct record = DataConverter.convertRecord(schema, resultSet);
     Map<String, Long> offset = new HashMap<>();
     if (incrementingColumn != null) {
@@ -210,7 +210,11 @@ public class TimestampIncrementingTableQuerier extends TableQuerier {
       default:
         throw new ConnectException("Unexpected query mode: " + mode);
     }
-    return new SourceRecord(partition, offset, topic, record.schema(), record);
+    Object key = null;
+    if (!partitionKey.isEmpty()) {
+      key = record.get(partitionKey);
+    }
+    return new SourceRecord(partition, offset, topic, null, null, key, record.schema(), record);
   }
 
   @Override

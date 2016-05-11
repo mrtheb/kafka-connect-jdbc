@@ -84,7 +84,7 @@ abstract class TableQuerier implements Comparable<TableQuerier> {
     return resultSet.next();
   }
 
-  public abstract SourceRecord extractRecord() throws SQLException;
+  public abstract SourceRecord extractRecord(String partitionKey) throws SQLException;
 
   public void close(long now) throws SQLException {
     resultSet.close();
