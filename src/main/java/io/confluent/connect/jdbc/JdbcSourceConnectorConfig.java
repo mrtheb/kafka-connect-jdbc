@@ -107,6 +107,12 @@ public class JdbcSourceConnectorConfig extends AbstractConfig {
       "Prefix to prepend to table names to generate the name of the Kafka topic to publish data "
       + "to, or in the case of a custom query, the full name of the topic to publish to.";
 
+  public static final String PARTITION_KEY_COLUMN_NAME_CONFIG = "partition.key.column.name";
+  private static final String PARTITION_KEY_COLUMN_NAME_DOC =
+      "Field name to use as the partition key when producing data to kafka. For now, it is"
+      + "only supported by the query mode";
+  public static final String PARTITION_KEY_COLUMN_NAME_DEFAULT = "";
+
   public static ConfigDef baseConfigDef() {
     return new ConfigDef()
         .define(CONNECTION_URL_CONFIG, Type.STRING, Importance.HIGH, CONNECTION_URL_DOC)
@@ -132,7 +138,9 @@ public class JdbcSourceConnectorConfig extends AbstractConfig {
         .define(QUERY_CONFIG, Type.STRING, QUERY_DEFAULT,
                 Importance.MEDIUM, QUERY_DOC)
         .define(TOPIC_PREFIX_CONFIG, Type.STRING,
-                Importance.HIGH, TOPIC_PREFIX_DOC);
+                Importance.HIGH, TOPIC_PREFIX_DOC)
+        .define(PARTITION_KEY_COLUMN_NAME_CONFIG, Type.STRING, PARTITION_KEY_COLUMN_NAME_DEFAULT,
+                Importance.LOW, PARTITION_KEY_COLUMN_NAME_DOC);
   }
 
   static ConfigDef config = baseConfigDef();
