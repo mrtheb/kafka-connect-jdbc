@@ -185,6 +185,7 @@ public class DataConverter {
       case Types.NCHAR:
       case Types.NVARCHAR:
       case Types.LONGNVARCHAR:
+      case Types.OTHER:
       case Types.CLOB:
       case Types.NCLOB:
       case Types.DATALINK:
@@ -245,7 +246,6 @@ public class DataConverter {
 
       case Types.ARRAY:
       case Types.JAVA_OBJECT:
-      case Types.OTHER:
       case Types.DISTINCT:
       case Types.STRUCT:
       case Types.REF:
@@ -333,6 +333,11 @@ public class DataConverter {
         break;
       }
 
+      case Types.OTHER: {
+        colValue = resultSet.getString(col);
+        break;
+      }
+
       case Types.NCHAR:
       case Types.NVARCHAR:
       case Types.LONGNVARCHAR: {
@@ -411,7 +416,6 @@ public class DataConverter {
 
       case Types.ARRAY:
       case Types.JAVA_OBJECT:
-      case Types.OTHER:
       case Types.DISTINCT:
       case Types.STRUCT:
       case Types.REF:
