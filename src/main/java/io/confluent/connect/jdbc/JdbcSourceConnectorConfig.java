@@ -113,6 +113,12 @@ public class JdbcSourceConnectorConfig extends AbstractConfig {
       + "only supported by the query mode";
   public static final String PARTITION_KEY_COLUMN_NAME_DEFAULT = "";
 
+  public static final String QUERY_ROWS_FETCH_LIMIT = "query.rows.fetch.limit";
+  private static final String QUERY_ROWS_FETCH_LIMIT_DOC =
+          "Limits the query returns by a fetch (using LIMIT), defaults to no limit to avoid"
+                  + "modifying the existing behavior";
+  public static final Integer QUERY_ROWS_FETCH_LIMIT_DEFAULT = 0;
+
   public static ConfigDef baseConfigDef() {
     return new ConfigDef()
         .define(CONNECTION_URL_CONFIG, Type.STRING, Importance.HIGH, CONNECTION_URL_DOC)
@@ -140,7 +146,9 @@ public class JdbcSourceConnectorConfig extends AbstractConfig {
         .define(TOPIC_PREFIX_CONFIG, Type.STRING,
                 Importance.HIGH, TOPIC_PREFIX_DOC)
         .define(PARTITION_KEY_COLUMN_NAME_CONFIG, Type.STRING, PARTITION_KEY_COLUMN_NAME_DEFAULT,
-                Importance.LOW, PARTITION_KEY_COLUMN_NAME_DOC);
+                Importance.LOW, PARTITION_KEY_COLUMN_NAME_DOC)
+        .define(QUERY_ROWS_FETCH_LIMIT, Type.INT, QUERY_ROWS_FETCH_LIMIT_DEFAULT,
+            Importance.LOW, QUERY_ROWS_FETCH_LIMIT_DOC);
   }
 
   static ConfigDef config = baseConfigDef();

@@ -144,6 +144,7 @@ public class JdbcSourceTask extends SourceTask {
                               (Long)offset.get(INCREMENTING_FIELD);
       Long timestampOffset = offset == null ? null :
                              (Long)offset.get(TIMESTAMP_FIELD);
+      Integer queryLimit = config.getInt(JdbcSourceTaskConfig.QUERY_ROWS_FETCH_LIMIT);
 
       String topicPrefix = config.getString(JdbcSourceTaskConfig.TOPIC_PREFIX_CONFIG);
 
@@ -151,14 +152,14 @@ public class JdbcSourceTask extends SourceTask {
         tableQueue.add(new BulkTableQuerier(queryMode, tableOrQuery, topicPrefix));
       } else if (mode.equals(JdbcSourceTaskConfig.MODE_INCREMENTING)) {
         tableQueue.add(new TimestampIncrementingTableQuerier(
-            queryMode, tableOrQuery, topicPrefix, null, null, incrementingColumn, incrementingOffset));
+            queryMode, tableOrQuery, topicPrefix, null, null, incrementingColumn, incrementingOffset, queryLimit));
       } else if (mode.equals(JdbcSourceTaskConfig.MODE_TIMESTAMP)) {
         tableQueue.add(new TimestampIncrementingTableQuerier(
-            queryMode, tableOrQuery, topicPrefix, timestampColumn, timestampOffset, null, null));
+            queryMode, tableOrQuery, topicPrefix, timestampColumn, timestampOffset, null, null, queryLimit));
       } else if (mode.endsWith(JdbcSourceTaskConfig.MODE_TIMESTAMP_INCREMENTING)) {
         tableQueue.add(new TimestampIncrementingTableQuerier(
             queryMode, tableOrQuery, topicPrefix, timestampColumn, timestampOffset,
-            incrementingColumn, incrementingOffset));
+            incrementingColumn, incrementingOffset, queryLimit));
       }
     }
 

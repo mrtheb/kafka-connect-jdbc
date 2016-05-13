@@ -60,15 +60,18 @@ public class TimestampIncrementingTableQuerier extends TableQuerier {
   private Long timestampOffset;
   private String incrementingColumn;
   private Long incrementingOffset = null;
+  private Integer queryLimit;
 
   public TimestampIncrementingTableQuerier(QueryMode mode, String name, String topicPrefix,
                                            String timestampColumn, Long timestampOffset,
-                                           String incrementingColumn, Long incrementingOffset) {
+                                           String incrementingColumn, Long incrementingOffset,
+                                           Integer queryLimit) {
     super(mode, name, topicPrefix);
     this.timestampColumn = timestampColumn;
     this.timestampOffset = timestampOffset;
     this.incrementingColumn = incrementingColumn;
     this.incrementingOffset = incrementingOffset;
+    this.queryLimit = queryLimit;
   }
 
   @Override
@@ -138,6 +141,9 @@ public class TimestampIncrementingTableQuerier extends TableQuerier {
       builder.append(" < CURRENT_TIMESTAMP ORDER BY ");
       builder.append(JdbcUtils.quoteString(timestampColumn, quoteString));
       builder.append(" ASC");
+    }
+    if (queryLimit != 0) {
+      builder.append(" LIMIT " + queryLimit);
     }
     String queryString = builder.toString();
     log.debug("{} prepared SQL query: {}", this, queryString);
