@@ -10,15 +10,10 @@ ENV CONFLUENT_HOME /opt/confluent-$CONFLUENT_FULL_VERSION
 
 RUN cd /opt && \
     curl -SL http://packages.confluent.io/archive/$CONFLUENT_VERSION/confluent-$CONFLUENT_FULL_VERSION-$SCALA_VERSION.tar.gz | \
-    tar -xz
+    tar -xz && \
+    rm -rf $CONFLUENT_HOME/share/java/camus $CONFLUENT_HOME/share/java/kafka-connect-hdfs $CONFLUENT_HOME/share/java/schema-registry
 
 WORKDIR $CONFLUENT_HOME
-
-# save some space
-RUN rm -rf \
-    share/java/camus \
-    share/java/kafka-connect-hdfs \
-    share/java/schema-registry
 
 COPY target/kafka-connect-jdbc-$CONFLUENT_FULL_VERSION-package/share/java/kafka-connect-jdbc/*.jar \
     share/java/kafka-connect-jdbc/
